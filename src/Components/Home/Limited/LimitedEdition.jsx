@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import "./LimitedEdition.css";
 
 import { useDispatch, useSelector } from "react-redux";
