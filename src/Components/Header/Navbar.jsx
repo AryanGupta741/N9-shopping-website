@@ -1,0 +1,274 @@
+import React, { useState } from "react";
+import "./Navbar.css";
+import Logo from "../Logo";
+import { useNavigate } from "react-router-dom";
+
+import { useSelector } from "react-redux";
+
+
+import { Link } from "react-router-dom";
+
+import { RiMenu2Line } from "react-icons/ri";
+import { FiSearch } from "react-icons/fi";
+import { FaRegUser } from "react-icons/fa6";
+import { RiShoppingBagLine } from "react-icons/ri";
+import { MdOutlineClose } from "react-icons/md";
+import { FiHeart } from "react-icons/fi";
+import { FaFacebookF } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { FaInstagram } from "react-icons/fa";
+import { FaYoutube } from "react-icons/fa";
+import { FaPinterest } from "react-icons/fa";
+
+import Badge from "@mui/material/Badge";
+
+const Navbar = () => {
+  const cart = useSelector((state) => state.cart);
+  const wishlist = useSelector((state) => state.wishlist);
+  const navigate = useNavigate();
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+    document.body.style.overflow = mobileMenuOpen ? "auto" : "hidden";
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const handleSearch = (e) => {
+    if (e.key === "Enter" || e.type === "click") {
+      if (searchQuery.trim()) {
+        navigate(`/shop?search=${searchQuery.trim()}`);
+        setSearchQuery("");
+        setShowSearch(false);
+        setMobileMenuOpen(false);
+        scrollToTop();
+      }
+    }
+  };
+
+  return (
+    <>
+      {/* Desktop Menu */}
+      <nav className="navBar">
+        <div className="logoLinkContainer">
+          <div className="logoContainer">
+            <Link to="/" onClick={scrollToTop}>
+              <Logo />
+            </Link>
+          </div>
+          <div className="linkContainer">
+            <ul>
+              <li>
+                <Link to="/" onClick={scrollToTop}>
+                  HOME
+                </Link>
+              </li>
+              <li>
+                <Link to="/shop" onClick={scrollToTop}>
+                  SHOP
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" onClick={scrollToTop}>
+                  BLOG
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" onClick={scrollToTop}>
+                  ABOUT
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" onClick={scrollToTop}>
+                  CONTACT
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="iconContainer">
+          <div className={`search-box ${showSearch ? "active" : ""}`}>
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearch}
+            />
+            <FiSearch size={22} onClick={() => {
+              if (showSearch) {
+                handleSearch({ type: "click" });
+              } else {
+                setShowSearch(true);
+              }
+            }} />
+          </div>
+          <Link to="/loginSignUp" onClick={scrollToTop}>
+            <FaRegUser size={22} />
+          </Link>
+          <Link to="/cart" onClick={scrollToTop}>
+            <Badge
+              badgeContent={cart.items.length === 0 ? "0" : cart.items.length}
+              color="primary"
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+            >
+              <RiShoppingBagLine size={22} />
+            </Badge>
+          </Link>
+          <Link to="/wishlist" onClick={scrollToTop}>
+            <Badge
+              badgeContent={
+                wishlist.items.length === 0 ? "0" : wishlist.items.length
+              }
+              color="primary"
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+            >
+              <FiHeart size={22} />
+            </Badge>
+          </Link>
+          {/* <RiMenu2Line size={22} /> */}
+        </div>
+      </nav>
+
+      {/* Mobile Menu */}
+      <nav>
+        <div className="mobile-nav">
+          {mobileMenuOpen ? (
+            <MdOutlineClose size={22} onClick={toggleMobileMenu} />
+          ) : (
+            <RiMenu2Line size={22} onClick={toggleMobileMenu} />
+          )}
+          <div className="logoContainer">
+            <Link to="/">
+              <Logo />
+            </Link>
+          </div>
+          <Link to="/wishlist">
+            <Badge
+              badgeContent={
+                wishlist.items.length === 0 ? "0" : wishlist.items.length
+              }
+              color="primary"
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+            >
+              <FiHeart size={22} color="black" />
+            </Badge>
+          </Link>
+          <Link to="/cart">
+            <Badge
+              badgeContent={cart.items.length === 0 ? "0" : cart.items.length}
+              color="primary"
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+            >
+              <RiShoppingBagLine size={22} color="black" />
+            </Badge>
+          </Link>
+        </div>
+        <div className={`mobile-menu ${mobileMenuOpen ? "open" : ""}`}>
+          <div className="mobile-menuTop">
+            <div className="mobile-menuSearchBar">
+              <div className="mobile-menuSearchBarContainer">
+                <input
+                  type="text"
+                  placeholder="Search products"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearch}
+                />
+                <FiSearch size={22} onClick={handleSearch} />
+              </div>
+            </div>
+            <div className="mobile-menuList">
+              <ul>
+                <li>
+                  <Link to="/" onClick={toggleMobileMenu}>
+                    HOME
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/shop" onClick={toggleMobileMenu}>
+                    SHOP
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/blog" onClick={toggleMobileMenu}>
+                    BLOG
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/about" onClick={toggleMobileMenu}>
+                    ABOUT
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" onClick={toggleMobileMenu}>
+                    CONTACT
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mobile-menuFooter">
+            <div className="mobile-menuFooterLogin">
+              <Link to="/loginSignUp" onClick={toggleMobileMenu}>
+                <FaRegUser />
+                <p>My Account</p>
+              </Link>
+            </div>
+            <div className="mobile-menuFooterLangCurrency">
+              <div className="mobile-menuFooterLang">
+                <p>Language</p>
+                <select name="language" id="language">
+                  <option value="english">United States | English</option>
+                  <option value="Hindi">Hindi</option>
+                  <option value="Germany">Germany</option>
+                  <option value="French">French</option>
+                </select>
+              </div>
+              <div className="mobile-menuFooterCurrency">
+                <p>Currency</p>
+                <select name="currency" id="currency">
+                  <option value="USD">$ USD</option>
+                  <option value="INR">₹ INR</option>
+                  <option value="EUR">€ EUR</option>
+                  <option value="GBP">£ GBP</option>
+                </select>
+              </div>
+            </div>
+            <div className="mobile-menuSocial_links">
+              <FaFacebookF />
+              <FaXTwitter />
+              <FaInstagram />
+              <FaYoutube />
+              <FaPinterest />
+            </div>
+          </div>
+        </div>
+      </nav>
+    </>
+  );
+};
+
+export default Navbar;
