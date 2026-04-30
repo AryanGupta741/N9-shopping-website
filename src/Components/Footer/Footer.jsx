@@ -144,7 +144,7 @@ const Footer = () => {
               rel="noreferrer"
               style={{ color: "#C22928", textDecoration: "none" }}
             >
-              Shakti Tamrakar
+              Aryan Gupta
             </a>{" "}
             with ❤️
           </p>
