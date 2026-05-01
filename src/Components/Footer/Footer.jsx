@@ -139,7 +139,7 @@ const Footer = () => {
           <p>
             © {getCurrentYear()} N9NE. All Rights Reserved | Made By{" "}
             <a
-              href="https://github.com/shakti177"
+              href="https://github.com/AryanGupta741"
               target="_blank"
               rel="noreferrer"
               style={{ color: "#C22928", textDecoration: "none" }}
